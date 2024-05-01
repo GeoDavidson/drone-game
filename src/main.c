@@ -2,6 +2,11 @@
 #include <math.h>
 #include "raylib.h"
 
+#define G 9.8
+#define MASS 0.25
+#define DRAG 0.99
+#define THRUST 2
+
 int main()
 {
     const int winWidth = 800;
@@ -9,11 +14,9 @@ int main()
 
     InitWindow(winWidth, winHeight, "Basic Window");
 
-    Rectangle rect = {winWidth / 2, winHeight / 2, 96, 16};
+    Rectangle rect = {winWidth / 2, winHeight / 2, 32, 8};
     Vector2 rectVel = {0.0f, 0.0f};
 
-    float force = 0.0f;
-    float gravity = 0.0f;
     float angle = 0.0f;
     float forceX = 0.0f;
     float forceY = 0.0f;
@@ -23,14 +26,15 @@ int main()
     while (WindowShouldClose() == false)
     {
         angle += GetGamepadAxisMovement(0, 2) * 10;
-
-        forceY = 9.8 / 15 + (GetGamepadAxisMovement(0, 1)) * 2 * cos(angle * PI / 180);
-        forceX = -(GetGamepadAxisMovement(0, 1)) * 2 * sin(angle * PI / 180);
+        forceX = -GetGamepadAxisMovement(0, 1) * THRUST * sin(angle * PI / 180);
+        forceY = MASS * G + GetGamepadAxisMovement(0, 1) * THRUST * cos(angle * PI / 180);
 
         rectVel.x += forceX;
+        rectVel.x *= DRAG;
         rect.x += rectVel.x;
 
         rectVel.y += forceY;
+        rectVel.y *= DRAG;
         rect.y += rectVel.y;
 
         BeginDrawing();
