@@ -11,7 +11,7 @@ int main()
     const int winWidth = 800;
     const int winHeight = 450;
 
-    InitWindow(winWidth, winHeight, "Basic Window");
+    InitWindow(winWidth, winHeight, "Drone Game");
 
     Rectangle rect = {winWidth / 2, winHeight / 2, 32, 8};
     Rectangle left = {rect.x, rect.y, 4, 12};
