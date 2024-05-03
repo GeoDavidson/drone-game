@@ -23,7 +23,6 @@ int main() {
 
     Rectangle rect = {winWidth / 2, winHeight / 2, 32, 8};
     Rectangle left = {rect.x, rect.y, 4, 12};
-    Rectangle normal = {rect.x, rect.y, 4, 24};
     Rectangle right = {rect.x, rect.y, 4, 12};
 
     float force = 0.0f;
@@ -61,9 +60,6 @@ int main() {
         left.x = rect.x;
         left.y = rect.y;
 
-        normal.x = rect.x;
-        normal.y = rect.y;
-
         right.x = rect.x;
         right.y = rect.y;
 
@@ -100,16 +96,15 @@ int main() {
         BeginDrawing();
 
         ClearBackground(WHITE);
+
         for (int i = 0; i < MAX_PARTICLES - 1; i++) { 
             DrawCircle(particles1[i].position.x + rect.width / 2 * cos(angle * DEG2RAD), particles1[i].position.y + left.height * sin(angle * DEG2RAD), particles1[i].radius, GREEN);
             DrawCircle(particles2[i].position.x - rect.width / 2 * cos(-angle * DEG2RAD), particles2[i].position.y + right.height * sin(-angle * DEG2RAD), particles2[i].radius, PURPLE);
         }
 
-        DrawRectanglePro(normal, (Vector2){normal.width / 2, normal.height}, angle, RED);
-        DrawRectanglePro(left, (Vector2){left.width + rect.width / 2, left.height / 2}, angle, BLUE);
-        DrawRectanglePro(right, (Vector2){-rect.width / 2, right.height / 2}, angle, BLUE);
+        DrawRectanglePro(left, (Vector2){left.width + rect.width / 2, left.height / 2}, angle, PURPLE);
+        DrawRectanglePro(right, (Vector2){-rect.width / 2, right.height / 2}, angle, GREEN);
         DrawRectanglePro(rect, (Vector2){rect.width / 2, rect.height / 2}, angle, BLACK);
-
 
         DrawFPS(5, 5);
 
