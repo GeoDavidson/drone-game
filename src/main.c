@@ -15,14 +15,6 @@ typedef struct particle {
     float shrinkRate;
 } particle_t;
 
-// float min(float a, float b) {
-//     return (a < b) ? a : b;
-// }
-
-float max(float a, float b) {
-    return (a > b) ? a : b;
-}
-
 int main() {
     const int winWidth = 800;
     const int winHeight = 450;
@@ -72,13 +64,9 @@ int main() {
 
         for (int i = 0; i < MAX_PARTICLES - 1; i++) {             
             if (particles[i].radius <= 0.0f) {
-                if (GetGamepadAxisMovement(0, 1) != 0.0f) {
-                    particles[i].radius = abs(GetRandomValue(3, 5) * max(0.55, abs(GetGamepadAxisMovement(0, 1))));
-                } else {
-                    particles[i].radius = abs(GetRandomValue(3, 5) * GetGamepadAxisMovement(0, 1));
-                }
-                particles[i].velocity.x = (GetRandomValue(-30, 30) / 10.0f);
-                particles[i].velocity.y = (GetRandomValue(0, 100) / 10.0f);
+                particles[i].radius = abs(GetRandomValue(3, 5) * GetGamepadAxisMovement(0, 1));
+                particles[i].velocity.x = (GetRandomValue(0, 100) / 10.0f) * -forceX;
+                particles[i].velocity.y = (GetRandomValue(0, 100) / 10.0f) * -forceY;
                 particles[i].position.x = rect.x;
                 particles[i].position.y = rect.y;
                 particles[i].shrinkRate = GetRandomValue(1, 10) / 10.0f;
