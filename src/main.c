@@ -32,9 +32,14 @@ int main() {
     float forceY = 0.0f;
     Vector2 rectVel = {0.0f, 0.0f};
 
-    particle_t particles[MAX_PARTICLES];
+    particle_t particles1[MAX_PARTICLES];
     for (int i = 0; i < MAX_PARTICLES - 1; i++) { 
-        particles[i].radius = 0.0f;
+        particles1[i].radius = 0.0f;
+    }
+
+    particle_t particles2[MAX_PARTICLES];
+    for (int i = 0; i < MAX_PARTICLES - 1; i++) { 
+        particles2[i].radius = 0.0f;
     }
 
     SetTargetFPS(60);
@@ -63,32 +68,48 @@ int main() {
         right.y = rect.y;
 
         for (int i = 0; i < MAX_PARTICLES - 1; i++) {             
-            if (particles[i].radius <= 0.0f) {
-                particles[i].radius = abs(GetRandomValue(3, 5) * GetGamepadAxisMovement(0, 1));
-                particles[i].velocity.x = (GetRandomValue(0, 100) / 10.0f) * -forceX;
-                particles[i].velocity.y = (GetRandomValue(0, 100) / 10.0f) * -forceY;
-                particles[i].position.x = rect.x;
-                particles[i].position.y = rect.y;
-                particles[i].shrinkRate = GetRandomValue(1, 10) / 10.0f;
+            if (particles1[i].radius <= 0.0f) {
+                particles1[i].radius = abs(GetRandomValue(3, 5) * GetGamepadAxisMovement(0, 1));
+                particles1[i].velocity.x = (GetRandomValue(0, 100) / 10.0f) * -forceX;
+                particles1[i].velocity.y = (GetRandomValue(0, 100) / 10.0f) * -forceY;
+                particles1[i].position.x = left.x;
+                particles1[i].position.y = left.y;
+                particles1[i].shrinkRate = GetRandomValue(1, 10) / 10.0f;
             } else {
-                particles[i].position.x += particles[i].velocity.x;
-                particles[i].position.y += particles[i].velocity.y;
-                particles[i].radius -= particles[i].shrinkRate;
+                particles1[i].position.x += particles1[i].velocity.x;
+                particles1[i].position.y += particles1[i].velocity.y;
+                particles1[i].radius -= particles1[i].shrinkRate;
+             }
+        }
+
+        for (int i = 0; i < MAX_PARTICLES - 1; i++) {             
+            if (particles2[i].radius <= 0.0f) {
+                particles2[i].radius = abs(GetRandomValue(3, 5) * GetGamepadAxisMovement(0, 1));
+                particles2[i].velocity.x = (GetRandomValue(0, 100) / 10.0f) * -forceX;
+                particles2[i].velocity.y = (GetRandomValue(0, 100) / 10.0f) * -forceY;
+                particles2[i].position.x = right.x;
+                particles2[i].position.y = right.y;
+                particles2[i].shrinkRate = GetRandomValue(1, 10) / 10.0f;
+            } else {
+                particles2[i].position.x += particles2[i].velocity.x;
+                particles2[i].position.y += particles2[i].velocity.y;
+                particles2[i].radius -= particles2[i].shrinkRate;
              }
         }
 
         BeginDrawing();
 
         ClearBackground(WHITE);
+        for (int i = 0; i < MAX_PARTICLES - 1; i++) { 
+            DrawCircle(particles1[i].position.x + rect.width / 2 * cos(angle * DEG2RAD), particles1[i].position.y + left.height * sin(angle * DEG2RAD), particles1[i].radius, GREEN);
+            DrawCircle(particles2[i].position.x - rect.width / 2 * cos(-angle * DEG2RAD), particles2[i].position.y + right.height * sin(-angle * DEG2RAD), particles2[i].radius, PURPLE);
+        }
 
         DrawRectanglePro(normal, (Vector2){normal.width / 2, normal.height}, angle, RED);
         DrawRectanglePro(left, (Vector2){left.width + rect.width / 2, left.height / 2}, angle, BLUE);
         DrawRectanglePro(right, (Vector2){-rect.width / 2, right.height / 2}, angle, BLUE);
         DrawRectanglePro(rect, (Vector2){rect.width / 2, rect.height / 2}, angle, BLACK);
 
-        for (int i = 0; i < MAX_PARTICLES - 1; i++) { 
-            DrawCircle(particles[i].position.x, particles[i].position.y, particles[i].radius, ORANGE);
-        }
 
         DrawFPS(5, 5);
 
