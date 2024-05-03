@@ -6,8 +6,16 @@
 #define DRAG 0.984
 #define THRUST 2
 
-int main()
-{
+#define MAX_PARTICLES 40
+
+typedef struct particle {
+    float radius;
+    Vector2 velocity;
+    Vector2 position;
+    float shrinkRate;
+} particle_t;
+
+int main() {
     const int winWidth = 800;
     const int winHeight = 450;
 
@@ -24,10 +32,19 @@ int main()
     float forceY = 0.0f;
     Vector2 rectVel = {0.0f, 0.0f};
 
+    particle_t particles[MAX_PARTICLES];
+    for (int i = 0; i < MAX_PARTICLES - 1; i++) { 
+        particles[i].radius = GetRandomValue(3, 5);
+        particles[i].velocity.x = GetRandomValue(-30, 30) / 10.0f;
+        particles[i].velocity.y = GetRandomValue(10, 100) / 10.0f;
+        particles[i].position.x = rect.x;
+        particles[i].position.y = rect.y;
+        particles[i].shrinkRate = GetRandomValue(1, 10) / 10.0f;
+    }
+
     SetTargetFPS(60);
 
-    while (WindowShouldClose() == false)
-    {
+    while (WindowShouldClose() == false) {
         force = GetGamepadAxisMovement(0, 1) * THRUST;
         angle += GetGamepadAxisMovement(0, 2) * 10;
         forceX = -force * sin(angle * PI / 180);
@@ -50,14 +67,34 @@ int main()
         right.x = rect.x;
         right.y = rect.y;
 
+        for (int i = 0; i < MAX_PARTICLES - 1; i++) {             
+            if (particles[i].radius <= 0.0f) {
+                particles[i].radius = GetRandomValue(3, 5);
+                particles[i].velocity.x = GetRandomValue(-30, 30) / 10.0f;
+                particles[i].velocity.y = GetRandomValue(10, 100) / 10.0f;
+                particles[i].position.x = rect.x;
+                particles[i].position.y = rect.y;
+                particles[i].shrinkRate = GetRandomValue(1, 10) / 10.0f;
+            } else {
+                particles[i].position.x += particles[i].velocity.x;
+                particles[i].position.y += particles[i].velocity.y;
+                particles[i].radius -= particles[i].shrinkRate;
+             }
+        }
+
         BeginDrawing();
 
         ClearBackground(WHITE);
 
-        DrawRectanglePro(rect, (Vector2){rect.width / 2, rect.height / 2}, angle, BLACK);
+
         DrawRectanglePro(normal, (Vector2){normal.width / 2, normal.height}, angle, RED);
         DrawRectanglePro(left, (Vector2){left.width + rect.width / 2, left.height / 2}, angle, BLUE);
         DrawRectanglePro(right, (Vector2){-rect.width / 2, right.height / 2}, angle, BLUE);
+        DrawRectanglePro(rect, (Vector2){rect.width / 2, rect.height / 2}, angle, BLACK);
+
+        for (int i = 0; i < MAX_PARTICLES - 1; i++) { 
+            DrawCircle(particles[i].position.x, particles[i].position.y, particles[i].radius, ORANGE);
+        }
 
         DrawFPS(5, 5);
 
