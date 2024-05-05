@@ -21,9 +21,13 @@ int main() {
 
     InitWindow(winWidth, winHeight, "Drone Game");
 
-    Rectangle rect = {winWidth / 2, winHeight / 2, 32, 8};
-    Rectangle left = {rect.x, rect.y, 4, 12};
-    Rectangle right = {rect.x, rect.y, 4, 12};
+    Rectangle body = {winWidth / 2, winHeight / 2, 32, 8};
+    Rectangle left = {body.x, body.y, 4, 12};
+    Rectangle right = {body.x, body.y, 4, 12};
+
+    Rectangle box = {winWidth / 2, winHeight - 64, 96, 96};
+    Rectangle horizontal = {winWidth / 2, winHeight - 64, 96, 2};
+    Rectangle vertical = {winWidth / 2, winHeight - 64, 2, 96};
 
     float force = 0.0f;
     float angle = 0.0f;
@@ -51,17 +55,17 @@ int main() {
 
         rectVel.x += forceX;
         rectVel.x *= DRAG;
-        rect.x += rectVel.x;
+        body.x += rectVel.x;
 
         rectVel.y += forceY + G;
         rectVel.y *= DRAG;
-        rect.y += rectVel.y;
+        body.y += rectVel.y;
 
-        left.x = rect.x;
-        left.y = rect.y;
+        left.x = body.x;
+        left.y = body.y;
 
-        right.x = rect.x;
-        right.y = rect.y;
+        right.x = body.x;
+        right.y = body.y;
 
         for (int i = 0; i < MAX_PARTICLES - 1; i++) {             
             if (particles1[i].radius <= 0.0f) {
@@ -98,13 +102,18 @@ int main() {
         ClearBackground(WHITE);
 
         for (int i = 0; i < MAX_PARTICLES - 1; i++) { 
-            DrawCircle(particles1[i].position.x + rect.width / 2 * cos(angle * DEG2RAD), particles1[i].position.y + left.height * sin(angle * DEG2RAD), particles1[i].radius, GREEN);
-            DrawCircle(particles2[i].position.x - rect.width / 2 * cos(-angle * DEG2RAD), particles2[i].position.y + right.height * sin(-angle * DEG2RAD), particles2[i].radius, PURPLE);
+            DrawCircle(particles1[i].position.x + body.width / 2 * cos(angle * DEG2RAD), particles1[i].position.y + left.height * sin(angle * DEG2RAD), particles1[i].radius, GREEN);
+            DrawCircle(particles2[i].position.x - body.width / 2 * cos(-angle * DEG2RAD), particles2[i].position.y + right.height * sin(-angle * DEG2RAD), particles2[i].radius, PURPLE);
         }
 
-        DrawRectanglePro(left, (Vector2){left.width + rect.width / 2, left.height / 2}, angle, PURPLE);
-        DrawRectanglePro(right, (Vector2){-rect.width / 2, right.height / 2}, angle, GREEN);
-        DrawRectanglePro(rect, (Vector2){rect.width / 2, rect.height / 2}, angle, BLACK);
+        DrawRectanglePro(left, (Vector2){left.width + body.width / 2, left.height / 2}, angle, PURPLE);
+        DrawRectanglePro(right, (Vector2){-body.width / 2, right.height / 2}, angle, GREEN);
+        DrawRectanglePro(body, (Vector2){body.width / 2, body.height / 2}, angle, BLACK);
+
+        DrawRectanglePro(box, (Vector2){box.width / 2, box.height / 2}, 0.0f, (Color){80, 80, 80, 80});
+        DrawRectanglePro(vertical, (Vector2){vertical.width / 2, vertical.height / 2}, 0.0f, (Color){135, 135, 135, 135});
+        DrawRectanglePro(horizontal, (Vector2){horizontal.width / 2, horizontal.height / 2}, 0.0f, (Color){135, 135, 135, 135});
+        DrawCircle(box.x + GetGamepadAxisMovement(0, 2) * 48, box.y + GetGamepadAxisMovement(0, 1) * 48, 6, (Color){135, 135, 135, 135});
 
         DrawFPS(5, 5);
 
