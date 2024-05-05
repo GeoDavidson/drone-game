@@ -1,3 +1,3 @@
-# 2d Drone Game
+# Drone Game
 
 Simulating drone physics with Raylib.
