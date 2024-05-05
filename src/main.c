@@ -102,8 +102,8 @@ int main() {
         ClearBackground(WHITE);
 
         for (int i = 0; i < MAX_PARTICLES - 1; i++) { 
-            DrawCircle(particles1[i].position.x + body.width / 2 * cos(angle * DEG2RAD), particles1[i].position.y + left.height * sin(angle * DEG2RAD), particles1[i].radius, GREEN);
-            DrawCircle(particles2[i].position.x - body.width / 2 * cos(-angle * DEG2RAD), particles2[i].position.y + right.height * sin(-angle * DEG2RAD), particles2[i].radius, PURPLE);
+            DrawCircle(particles1[i].position.x + right.width / 2 + body.width / 2 * cos(angle * DEG2RAD), particles1[i].position.y + left.height * sin(angle * DEG2RAD), particles1[i].radius, GREEN);
+            DrawCircle(particles2[i].position.x - left.width / 2 - body.width / 2 * cos(-angle * DEG2RAD), particles2[i].position.y + right.height * sin(-angle * DEG2RAD), particles2[i].radius, PURPLE);
         }
 
         DrawRectanglePro(left, (Vector2){left.width + body.width / 2, left.height / 2}, angle, PURPLE);
